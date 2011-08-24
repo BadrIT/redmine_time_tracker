@@ -1,4 +1,14 @@
 require 'redmine'
+require 'dispatcher'
+
+Dispatcher.to_prepare :time_tracker do
+  require_dependency 'issue'
+  
+  unless Issue.included_modules.include? TimeTracker::IssuePatch
+    Issue.send :include, TimeTracker::IssuePatch
+  end
+  
+end
 
 Redmine::Plugin.register :redmine_time_tracker do
   name 'Redmine Time Tracker plugin'
