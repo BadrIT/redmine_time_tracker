@@ -12,10 +12,10 @@ class TimeTrackerController < ApplicationController
   end
   
   def tracekrs
-    @all_trackers = Tracker.find_all_by_is_scrum(true)
+    @trackers = Tracker.find_all_by_is_scrum(true)
     
     respond_to do |format|
-      format.xml  { render :xml => @all_trackers }
+      format.xml
     end
   end
   
