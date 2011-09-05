@@ -20,7 +20,7 @@ Redmine::Plugin.register :redmine_time_tracker do
   
   
   project_module :scrummer do
-    permission :time_tracker,  { :time_tracker => [:activities, :tracekrs, :get_trackable_opened_issues] }
+    permission :time_tracker,  { :time_tracker => [:activities, :trackers, :get_trackable_opened_issues] }
 
   end
 end

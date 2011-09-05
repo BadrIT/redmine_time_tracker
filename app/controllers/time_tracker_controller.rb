@@ -4,14 +4,14 @@ class TimeTrackerController < ApplicationController
   prepend_before_filter :find_scrum_project, :only => [:get_trackable_opened_issues, :activities]
   
   def activities
-    @activities = @project.activities
+    @activities = @project ? @project.activities : TimeEntryActivity.all
         
     respond_to do |format|
       format.xml
     end
   end
   
-  def tracekrs
+  def trackers
     @trackers = Tracker.find_all_by_is_scrum(true)
     
     respond_to do |format|
@@ -32,8 +32,10 @@ class TimeTrackerController < ApplicationController
   
   protected
   def find_scrum_project
-    project_id = params[:project_id]
-    @project = Project.find(project_id)
+    if params[:project_id]
+      project_id = params[:project_id]
+      @project = Project.find(project_id)
+    end
   rescue ActiveRecord::RecordNotFound
     render_404
   end
