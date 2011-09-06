@@ -3,7 +3,7 @@ class TimeEntryCustomFieldStartTime < ActiveRecord::Migration
     # add start_time custom field to TimeEntry
     start_time_custom_field = TimeEntryCustomField.find_or_create_by_scrummer_caption(:scrummer_caption => :start_time)
     start_time_custom_field.update_attributes(
-                        :name          => l(:start_time),
+                        :name          => "Start time",
                         :field_format  => 'string',
                         :regexp        => '\d\d:\d\d\s?[AM|PM|am|pm]',
                         :default_value => '00:00 AM')
