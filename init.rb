@@ -8,6 +8,10 @@ Dispatcher.to_prepare :time_tracker do
     Issue.send :include, TimeTracker::IssuePatch
   end
   
+  unless TimeEntry.included_modules.include? TimeTracker::TimeEntryPatch
+    TimeEntry.send :include, TimeTracker::TimeEntryPatch
+  end
+  
 end
 
 Redmine::Plugin.register :redmine_time_tracker do
