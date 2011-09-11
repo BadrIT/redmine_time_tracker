@@ -19,11 +19,11 @@ class TimeTrackerController < ApplicationController
     end
   end
   
-  def get_trackable_opened_issues
+  def my_trackable_opened_issues
     @user = User.current
     in_progress_id = IssueStatus.status_in_progress.id
     
-    @trackable_opened_issues = if @project
+    @issues = if @project
      @project.issues.trackable.find(:all,
                                     :conditions =>['assigned_to_id = ? AND status_id = ?', @user.id, in_progress_id])      
     else
@@ -32,7 +32,7 @@ class TimeTrackerController < ApplicationController
     end
     
     respond_to do |format|
-      format.xml  { render :xml => @trackable_opened_issues }
+      format.xml
     end
   end
   
