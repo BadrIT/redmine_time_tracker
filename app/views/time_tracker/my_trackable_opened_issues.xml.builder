@@ -1,5 +1,5 @@
 xml.instruct!
-xml.activities :type => 'array' do
+xml.issues :type => 'array' do
   @issues.each do |issue|
     xml.issue do
       xml.id          issue.id
