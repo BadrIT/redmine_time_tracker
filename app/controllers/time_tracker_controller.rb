@@ -37,6 +37,14 @@ class TimeTrackerController < ApplicationController
     end
   end
   
+  def time_entries
+    @time_entries = TimeEntry.all
+    
+    respond_to do |format|
+      format.xml
+    end
+  end
+  
   protected
   def find_scrum_project
     if params[:project_id]
