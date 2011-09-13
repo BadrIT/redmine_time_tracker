@@ -21,15 +21,11 @@ class TimeTrackerController < ApplicationController
   
   def my_trackable_opened_issues
     @user = User.current
-    in_progress_id = IssueStatus.status_in_progress.id
-    defined_id = IssueStatus.status_defined.id
     
     @issues = if @project
-     @project.issues.trackable.find(:all,
-                                    :conditions =>['assigned_to_id = ? AND ( status_id = ? OR status_id = ?', @user.id, in_progress_id, defined_id])      
+     @project.issues.trackable.active.find(:all, :conditions =>['assigned_to_id = ?', @user.id])      
     else
-     Issue.trackable.find(:all,
-                          :conditions =>['assigned_to_id = ? AND status_id = ?', @user.id, in_progress_id])
+     Issue.trackable.active.find(:all, :conditions =>['assigned_to_id = ?', @user.id])
     end
     
     respond_to do |format|
