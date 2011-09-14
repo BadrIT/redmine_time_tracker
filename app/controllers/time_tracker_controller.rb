@@ -1,4 +1,4 @@
-class TimeTrackerController < ApplicationController
+class TimeTrackerController < TimelogController
   unloadable
   
   prepend_before_filter :find_scrum_project, :only => [:get_trackable_opened_issues, :activities]
@@ -27,14 +27,6 @@ class TimeTrackerController < ApplicationController
     else
      Issue.trackable.active.find(:all, :conditions =>['assigned_to_id = ?', @user.id])
     end
-    
-    respond_to do |format|
-      format.xml
-    end
-  end
-  
-  def time_entries
-    @time_entries = TimeEntry.all
     
     respond_to do |format|
       format.xml

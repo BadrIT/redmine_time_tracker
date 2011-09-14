@@ -1,6 +1,6 @@
 xml.instruct!
 xml.time_entries :type => 'array' do
-  @time_entries.each do |t|
+  @entries.each do |t|
     xml.time_entry do
       xml.id         t.id
       xml.project    :name => t.project.name, :id => t.project_id
