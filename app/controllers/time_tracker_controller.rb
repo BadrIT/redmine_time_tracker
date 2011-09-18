@@ -1,6 +1,7 @@
 class TimeTrackerController < TimelogController
   unloadable
   
+  before_filter :authorize, :except => [:index, :my_trackable_opened_issues, :activities, :trackers]
   prepend_before_filter :find_scrum_project, :only => [:get_trackable_opened_issues, :activities]
   
   def activities
