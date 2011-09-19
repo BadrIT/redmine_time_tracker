@@ -11,7 +11,7 @@ module TimeTracker
                                                                 Tracker.scrum_task_tracker.id,
                                                                 Tracker.scrum_defect_tracker.id,
                                                                 Tracker.scrum_refactor_tracker.id,
-                                                                Tracker.scrum_spark_tracker.id]} }
+                                                                Tracker.scrum_spike_tracker.id]} }
 			end
 		end
 		
