@@ -23,11 +23,15 @@ class TimeTrackerController < TimelogController
   def my_trackable_opened_issues
     @user = User.current
     
-    @issues = if @project
-     @project.issues.trackable.active.find(:all, :conditions =>['assigned_to_id = ?', @user.id])      
+    issues_scope = if @project
+      @project.issues
     else
-     Issue.trackable.active.find(:all, :conditions =>['assigned_to_id = ?', @user.id])
+      Issue
     end
+
+    issues_scope = issues_scope.trackable if Issue.respond_to?(:trackable)
+    
+    @issues = issues_scope.active.find(:all, :conditions =>['assigned_to_id = ?', @user.id])
     
     respond_to do |format|
       format.xml
