@@ -1,7 +1,6 @@
 class TimeTrackerController < TimelogController
   unloadable
   
-  before_filter :authorize, :except => [:index, :my_trackable_opened_issues, :activities, :trackers]
   prepend_before_filter :find_scrum_project, :only => [:get_trackable_opened_issues, :activities]
   
   def activities
@@ -13,7 +12,11 @@ class TimeTrackerController < TimelogController
   end
   
   def trackers
-    @trackers = Tracker.find_all_by_is_scrum(true)
+    if Tracker.new.respond_to?(:is_scrum)
+      @trackers = Tracker.find_all_by_is_scrum(true)
+    else
+      @trackers = Tracker.all
+    end
     
     respond_to do |format|
       format.xml
