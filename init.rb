@@ -1,7 +1,6 @@
 require 'redmine'
-require 'dispatcher'
 
-Dispatcher.to_prepare :time_tracker do
+Rails.configuration.to_prepare do
   require_dependency 'issue'
   
   unless Issue.included_modules.include? TimeTracker::IssuePatch
@@ -11,7 +10,6 @@ Dispatcher.to_prepare :time_tracker do
   unless TimeEntry.included_modules.include? TimeTracker::TimeEntryPatch
     TimeEntry.send :include, TimeTracker::TimeEntryPatch
   end
-  
 end
 
 Redmine::Plugin.register :redmine_time_tracker do
