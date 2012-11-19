@@ -16,10 +16,10 @@
   
 
   <p><%= f.text_field :spent_from, :value=>@time_entry.spent_from.strftime("%Y-%m-%d"), :size=>10, :required => true %><%= calendar_for('time_entry_spent_from') %>
-  <%= text_field_tag 'spent_from_time', @time_entry.spent_from.strftime("%H:%M"), :size=>3 %>
+  <%= text_field_tag 'time_entry[spent_from_time]', @time_entry.spent_from.try(:strftime, '%H:%M'), :size=>3 %>
   </p>
   <p><%= f.text_field :spent_to, :value=>@time_entry.spent_to.strftime("%Y-%m-%d"), :size=>10, :required => true %><%= calendar_for('time_entry_spent_to') %>
-  <%= text_field_tag 'spent_to_time', @time_entry.spent_to.strftime("%H:%M"), :size=>3 %>
+  <%= text_field_tag 'time_entry[spent_to_time]', @time_entry.spent_to.try(:strftime, '%H:%M'), :size=>3 %>
   </p>
 
   <p><%= f.text_field :comments, :size => 100 %></p>

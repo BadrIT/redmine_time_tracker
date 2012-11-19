@@ -7,6 +7,9 @@ module TimeTracker
         
         include InstanceMethods
 
+        attr_accessor :spent_from_time, :spent_to_time
+        safe_attributes :spent_from, :spent_to, :spent_from_time, :spent_to_time
+
         after_save :update_issue
         
         after_destroy :update_issue_history
@@ -66,6 +69,11 @@ module TimeTracker
 
       def set_spent_from_to
         if (spent_from && spent_to)
+          if spent_from_time && spent_to_time
+            self.spent_from = self.spent_from.strftime("%Y-%m-%d") + ' ' + @spent_from_time
+            self.spent_to = self.spent_to.strftime("%Y-%m-%d") + ' ' + @spent_to_time
+          end
+
           self.hours = (spent_to - spent_from)/60.0/60.0 if spent_to - spent_from > 0
           self.spent_on = self.spent_from
         end
