@@ -21,8 +21,10 @@ module TimeTracker
     
     module InstanceMethods
       def update_issue
-        self.issue.status = IssueStatus.in_progress
-        self.issue.save
+        if IssueStatus.respond_to?(:in_progress)
+          self.issue.status = IssueStatus.in_progress
+          self.issue.save
+        end
       end
       
       def update_issue_history

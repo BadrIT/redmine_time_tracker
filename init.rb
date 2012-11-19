@@ -19,4 +19,6 @@ Redmine::Plugin.register :redmine_time_tracker do
   version '0.0.1'
   url 'http://example.com/path/to/plugin'
   author_url 'http://www.badrit.com'
+
+  menu :top_menu, :log_time, {:controller => 'timelog', :action => 'new' }, :caption => 'Log Time', :if => Proc.new { User.current.logged? }
 end
