@@ -23,8 +23,7 @@ module TimeTracker
       end
       
       def start_time
-        start_time_custom_field = TimeEntryCustomField.find_by_name 'Start time'
-        self.custom_value_for(start_time_custom_field).try(:value)
+        self.spent_to.strftime("%H:%M")
       end
       
       def update_issue_history
