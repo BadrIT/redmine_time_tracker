@@ -12,7 +12,8 @@ xml.time_entries :type => 'array' do
       xml.spent_on   t.spent_on
       xml.created_on t.created_on
       xml.updated_on t.updated_on
-      xml.start_time t.start_time
+      xml.spent_from t.spent_from
+      xml.spent_to   t.spent_to
     end
   end
 end

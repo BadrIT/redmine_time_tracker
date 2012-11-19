@@ -19,10 +19,4 @@ Redmine::Plugin.register :redmine_time_tracker do
   version '0.0.1'
   url 'http://example.com/path/to/plugin'
   author_url 'http://www.badrit.com'
-  
-  
-  project_module :scrummer do
-    permission :time_tracker,  { :time_tracker => [:activities, :trackers, :get_trackable_opened_issues] }
-
-  end
 end

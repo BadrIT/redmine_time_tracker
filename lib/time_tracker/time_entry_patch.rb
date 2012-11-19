@@ -22,27 +22,8 @@ module TimeTracker
         self.issue.save
       end
       
-      def start_time
-        self.spent_to.strftime("%H:%M")
-      end
-      
       def update_issue_history
         self.issue.check_history_entries
-      end
-      
-      def attributes=(new_attributes, guard_protected_attributes = true)
-        if new_attributes
-          start_time = new_attributes[:start_time]
-        
-          if start_time
-            start_time_custom_field = TimeEntryCustomField.find_by_name 'Start time'
-            self.custom_field_values = {start_time_custom_field.id => start_time}
-          end
-          
-          new_attributes.delete :start_time
-          
-          super(new_attributes, guard_protected_attributes = true)          
-        end
       end
 
       def hours=(h)
