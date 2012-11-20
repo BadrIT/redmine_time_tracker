@@ -20,5 +20,7 @@ Redmine::Plugin.register :redmine_time_tracker do
   url 'http://example.com/path/to/plugin'
   author_url 'http://www.badrit.com'
 
-  menu :top_menu, :log_time, {:controller => 'timelog', :action => 'new' }, :caption => 'Log Time', :if => Proc.new { User.current.logged? }
+  menu :top_menu, :log_time, {:controller => 'timelog', :action => 'new' }, :caption => 'Log time', :if => Proc.new { User.current.logged? }
+
+  menu :top_menu, :time_details, {:controller => 'timelog', :action => 'report' }, :caption => 'Time details', :if => Proc.new { User.current.logged? }
 end
