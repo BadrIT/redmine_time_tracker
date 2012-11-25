@@ -1,0 +1,41 @@
+<% total_width = 900 # in pixels %>
+<% scale = total_width / Float(@max_hour - @min_hour) %>
+<table class="chart">
+  <tr>
+    <td></td>
+    <td></td>
+    <td class="details">
+      <% @min_hour.upto(@max_hour) do |hour| -%>
+        <%= empty_div(1.0, "#{hour}:00", :scale=>scale, :style=>'text-align: left; height: 1em;') %>
+      <% end -%>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td class="details">
+      <% @min_hour.upto(@max_hour-1) do |hour| -%>
+        <%= empty_div(1.0, nil, :scale=>scale, :border=>1, :style=>'border: solid 1px black; border-top: none; height: 5px;') %>
+      <% end -%>
+    </td>
+  </tr>
+  <% entries_by_day.each do |day, entries| -%>
+    <tr>
+      <td><%= day %></td>
+      <td><%= html_hours(sum_hours(entries).to_s)%></td>
+      <td class="details">
+        <% last_hour = @min_hour%>
+        <% entries.each do |entry| -%>
+          <% spent_from = entry.spent_from.hour + entry.spent_from.min / 60.0 %>
+          <% if (spent_from - last_hour)*scale > 1%>
+            <% logger.info "last_hour: #{last_hour}, spent_from:#{spent_from}" %>
+            <%= empty_div(spent_from - last_hour, "", :scale=>scale)%>
+          <% end %>
+          <% last_hour = entry.spent_to.hour + entry.spent_to.min / 60.0 %>
+            <%= link_to_if entry.editable_by?(User.current), time_entry_div(entry, :scale=>scale),
+            {:controller => 'timelog', :action => 'edit', :id => entry, :project_id => nil} %>
+        <% end -%>
+      </td>
+    </tr>
+  <% end -%>
+</table>

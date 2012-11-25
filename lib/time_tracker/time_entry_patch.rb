@@ -64,6 +64,7 @@ module TimeTracker
           return unless t
           self.spent_from = t.spent_from if t.spent_from < self.spent_from
           self.spent_to = t.spent_to if t.spent_to > self.spent_to
+          self.update_entry_origin_atts
           # no longer need that entry
           t.destroy
         end while t
@@ -76,9 +77,13 @@ module TimeTracker
             self.spent_to = self.spent_to.strftime("%Y-%m-%d") + ' ' + @spent_to_time
           end
 
-          self.hours = (spent_to - spent_from)/60.0/60.0 if spent_to - spent_from > 0
-          self.spent_on = self.spent_from
+          self.update_entry_origin_atts
         end
+      end
+
+      def update_entry_origin_atts
+        self.hours = (spent_to - spent_from)/60.0/60.0 if spent_to - spent_from > 0
+        self.spent_on = self.spent_from
       end
       
     end

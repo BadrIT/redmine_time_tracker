@@ -22,5 +22,7 @@ Redmine::Plugin.register :redmine_time_tracker do
 
   menu :top_menu, :log_time, {:controller => 'timelog', :action => 'new' }, :caption => 'Log time', :if => Proc.new { User.current.logged? }
 
-  menu :top_menu, :time_details, {:controller => 'timelog', :action => 'report' }, :caption => 'Time details', :if => Proc.new { User.current.logged? }
+  menu :top_menu, :time_details, {:controller => 'timelog', :action => 'report', :criterias=>['member', 'issue'], :columns=>'day', :period=>'current_week', :user_id=>''}, :caption => 'Time details', :require => :loggedin, :if => Proc.new { !(User.current.projects.blank?) }
+
+  menu :top_menu, :time_chart, {:controller => 'time_tracker', :action => 'charts', :period => 'current_week'}, :caption => 'Time charts', :if => Proc.new { User.current.logged? }
 end

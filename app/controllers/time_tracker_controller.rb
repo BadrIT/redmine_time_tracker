@@ -5,6 +5,8 @@ class TimeTrackerController < TimelogController
   before_filter :require_login
   accept_api_auth :activities, :trackers, :my_trackable_opened_issues
   prepend_before_filter :find_scrum_project, :only => [:my_trackable_opened_issues, :activities]
+
+  before_filter :authorize_global, :only => [:charts]
   
   def activities
     @activities = @project ? @project.activities : TimeEntryActivity.all
@@ -41,6 +43,38 @@ class TimeTrackerController < TimelogController
     
     respond_to do |format|
       format.xml
+    end
+  end
+
+  def charts
+    sort_init 'spent_from', 'desc'
+    sort_update 'spent_from' => 'spent_from',
+                'user' => 'user_id',
+                'activity' => 'activity_id',
+                'project' => "#{Project.table_name}.name",
+                'issue' => 'issue_id',
+                'hours' => 'hours'
+
+    retrieve_date_range
+
+    scope = TimeEntry.visible.spent_between(@from, @to).where('user_id = ?', User.current.id)
+
+    respond_to do |format|
+      format.html {
+        entries = scope.find(:all, 
+              :include => [:project, :activity, :user, {:issue => :tracker}], :order=>'spent_from')
+        @entries_by_day = entries.group_by(&:spent_on)
+        @min_hour = 25
+        @max_hour = 0
+        @entries_by_day.each do |day, entries|
+          @min_hour = entries.first.spent_from.hour if entries.first.spent_from.hour < @min_hour
+          @max_hour = entries.last.spent_to.hour if entries.last.spent_to.hour > @max_hour
+        end
+        @max_hour = @min_hour + 7 if @max_hour < @min_hour + 7
+        @max_hour += 1
+        @total_hours = scope.sum(:hours).to_f
+        render :layout => !request.xhr?
+      }
     end
   end
   
