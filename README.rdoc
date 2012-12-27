@@ -11,6 +11,7 @@ More details can be found at in the doc directory or on the official website htt
   2. Clone the scrummer plugin `git clone https://github.com/BadrIT/redmine_time_tracker.git`
   3. cd ..
   4. Run `RAILS_ENV=production rake redmine:plugins:migrate`
+  5. Run `RAILS_ENV=production rake time_tracker:load_default_data`
 
 = Update Time Tracker Plugin
   1. cd plugins/redmine_time_tracker
