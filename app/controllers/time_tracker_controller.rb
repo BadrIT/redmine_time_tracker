@@ -6,7 +6,7 @@ class TimeTrackerController < TimelogController
   accept_api_auth :activities, :trackers, :my_trackable_opened_issues
   prepend_before_filter :find_scrum_project, :only => [:my_trackable_opened_issues, :activities]
 
-  before_filter :authorize_global, :only => [:charts]
+  # before_filter :authorize_global, :only => [:charts]
   
   def activities
     @activities = @project ? @project.activities : TimeEntryActivity.all
