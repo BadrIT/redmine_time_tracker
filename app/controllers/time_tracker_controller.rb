@@ -9,7 +9,7 @@ class TimeTrackerController < TimelogController
   # before_filter :authorize_global, :only => [:charts]
   
   def activities
-    @activities = @project ? @project.activities : TimeEntryActivity.where('project_id is not null').all
+    @activities = @project ? @project.activities : current_user.projects.all(:include => :time_entry_activities).map(&:time_entry_activities).flatten
 
     respond_to do |format|
       format.xml
