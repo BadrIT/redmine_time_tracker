@@ -17,10 +17,10 @@ class TimeTrackerController < TimelogController
   end
   
   def trackers
+    @trackers = User.current.projects.all(:include => :trackers).map(&:trackers).flatten
+    
     if Tracker.new.respond_to?(:is_scrum)
-      @trackers = Tracker.find_all_by_is_scrum(true)
-    else
-      @trackers = Tracker.all
+      @trackers = @trackers.select(&:is_scrum)
     end
     
     respond_to do |format|
