@@ -39,7 +39,9 @@ class TimeTrackerController < TimelogController
 
     issues_scope = issues_scope.trackable if Issue.respond_to?(:trackable)
     
-    @issues = issues_scope.active.find(:all, :conditions =>['assigned_to_id = ?', @user.id])
+
+    # only issues assigned to active projects
+    @issues = issues_scope.active.find(:all, :conditions =>['assigned_to_id = ? and projects.status = ?', @user.id, Project::STATUS_ACTIVE], :joins=> 'inner join projects on projects.id=issues.project_id',:include => 'project')
     
     respond_to do |format|
       format.xml
