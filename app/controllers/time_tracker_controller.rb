@@ -9,7 +9,16 @@ class TimeTrackerController < TimelogController
   # before_filter :authorize_global, :only => [:charts]
   
   def activities
-    @activities = @project ? @project.activities : User.current.projects.all(:include => :time_entry_activities).map(&:time_entry_activities).flatten
+    @activities = if @project 
+      @project.activities
+    else
+      User.current.projects.map do |p|
+        p.activities.map do |activity|
+          activity.project_id ||= p.id
+          activity
+        end
+      end.flatten
+    end
 
     respond_to do |format|
       format.xml
@@ -39,7 +48,6 @@ class TimeTrackerController < TimelogController
 
     issues_scope = issues_scope.trackable if Issue.respond_to?(:trackable)
     
-
     # only issues assigned to active projects
     @issues = issues_scope.active.find(:all, :conditions =>['assigned_to_id = ? and projects.status = ?', @user.id, Project::STATUS_ACTIVE], :joins=> 'inner join projects on projects.id=issues.project_id',:include => 'project')
     
