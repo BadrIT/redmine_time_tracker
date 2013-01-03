@@ -1,0 +1,14 @@
+.billable {color: #3A3; border-color: #3A3;}
+.non-billable {color: red; border-color: red;}
+
+table.chart {width: 100%;}
+table.chart tr td.details {width: 100%;}
+table.chart tr td.details div.entry {
+  height: 4em;
+  float: left;
+  overflow: hidden;
+  font-size: 8pt;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
