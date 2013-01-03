@@ -3,7 +3,7 @@ class TimeTrackerController < TimelogController
   
   skip_before_filter :authorize
   before_filter :require_login
-  accept_api_auth :activities, :trackers, :my_trackable_opened_issues
+  accept_api_auth :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months
   prepend_before_filter :find_scrum_project, :only => [:my_trackable_opened_issues, :activities]
 
   # before_filter :authorize_global, :only => [:charts]
@@ -75,6 +75,25 @@ class TimeTrackerController < TimelogController
         @total_hours = scope.sum(:hours).to_f
         render :layout => !request.xhr?
       }
+    end
+  end
+
+  def users_hours_by_months
+    quarter_year = params[:year]
+    quarter_months = params[:months].split(',').map(&:to_i)
+    
+    @users_hours = User.all.inject({}) do |memo, user|
+      
+      memo["#{user.login}"] = quarter_months.inject({}) do |memo2, qm|
+        memo2[qm] = TimeEntry.work_hours_per_user_per_year_per_month(user.id, quarter_year, qm).sum(:hours)
+        memo2
+      end
+
+      memo
+    end
+
+    respond_to do |format|
+      format.json { render :json => @users_hours }
     end
   end
   

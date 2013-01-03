@@ -16,6 +16,15 @@ module TimeTracker
 
         before_validation :set_spent_from_to
         before_validation :merge_entries
+
+        scope :work_hours_per_user_per_year_per_month, lambda {|user_id, year, month|
+           {
+             :conditions => ["user_id = #{user_id} and 
+                             tyear = #{year} and
+                             tmonth = #{month}"],
+             :select => "sum(hours)"
+           }
+         }
       end
     end
     
