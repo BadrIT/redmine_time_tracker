@@ -2,7 +2,7 @@ class TimeTrackerController < TimelogController
   unloadable
   
   skip_before_filter :authorize
-  # before_filter :require_login
+  before_filter :require_login
   accept_api_auth :shared_active_activities, :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months
   prepend_before_filter :find_scrum_project, :only => [:my_trackable_opened_issues, :activities]
 
