@@ -3,22 +3,21 @@ class TimeTrackerController < TimelogController
   
   skip_before_filter :authorize
   before_filter :require_login
-  accept_api_auth :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months
+  accept_api_auth :shared_active_activities, :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months
   prepend_before_filter :find_scrum_project, :only => [:my_trackable_opened_issues, :activities]
 
   # before_filter :authorize_global, :only => [:charts]
   
-  def activities
-    @activities = if @project 
-      @project.activities
-    else
-      User.current.projects.map do |p|
-        p.activities.map do |activity|
-          activity.project_id ||= p.id
-          activity
-        end
-      end.flatten
+  def shared_active_activities
+    @activities = TimeEntryActivity.shared.active
+
+    respond_to do |format|
+      format.xml
     end
+  end
+
+  def activities
+    @activities = @project ? @project.activities : User.current.projects.all(:include => :time_entry_activities).map(&:time_entry_activities).flatten
 
     respond_to do |format|
       format.xml
