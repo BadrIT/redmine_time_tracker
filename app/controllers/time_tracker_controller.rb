@@ -45,6 +45,12 @@ class TimeTrackerController < TimelogController
     
     # only issues assigned to active projects
     @issues = issues_scope.active.find(:all, :conditions =>['assigned_to_id = ? and projects.status = ?', @user.id, Project::STATUS_ACTIVE], :joins=> 'inner join projects on projects.id=issues.project_id',:include => 'project')
+
+    # skip any issues which current user is NOT member of its project
+    @issues = @issues.reject do |issue|
+      issue.project.members.find_by_id(@user.id).nil?
+    end
+
     
     respond_to do |format|
       format.xml
