@@ -62,7 +62,7 @@ class TimeTrackerController < TimelogController
 
     retrieve_date_range
 
-    if User.current.admin && params[:user_id]
+    if User.current.admin && params[:user_id].present?
       @user = User.find(params[:user_id])
     else
       @user = User.current
