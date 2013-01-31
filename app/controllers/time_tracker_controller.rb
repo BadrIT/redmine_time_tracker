@@ -62,7 +62,17 @@ class TimeTrackerController < TimelogController
 
     retrieve_date_range
 
-    scope = TimeEntry.visible.spent_between(@from, @to).where('user_id = ?', User.current.id)
+    if User.current.admin && params[:user_id]
+      @user = User.find(params[:user_id])
+    else
+      @user = User.current
+    end
+
+    if @user
+      scope = scope.where('user_id = ?', @user.id)
+    end
+
+    scope = TimeEntry.visible.spent_between(@from, @to).where('user_id = ?', @user.id)
 
     respond_to do |format|
       format.html {
