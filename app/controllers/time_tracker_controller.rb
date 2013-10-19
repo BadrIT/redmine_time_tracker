@@ -60,7 +60,8 @@ class TimeTrackerController < TimelogController
                 'issue' => 'issue_id',
                 'hours' => 'hours'
 
-    retrieve_date_range
+    @query = TimeEntryQuery.build_from_params(params, :name => '_')
+    scope = time_entry_scope
 
     if User.current.admin && params[:user_id].present?
       @user = User.find(params[:user_id])
@@ -68,7 +69,7 @@ class TimeTrackerController < TimelogController
       @user = User.current
     end
 
-    scope = TimeEntry.visible.spent_between(@from, @to).where('user_id = ?', @user.id)
+    scope = scope.where('user_id = ?', @user.id)
 
     respond_to do |format|
       format.html {
