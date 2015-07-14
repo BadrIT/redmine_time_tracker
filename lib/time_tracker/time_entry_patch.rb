@@ -24,7 +24,17 @@ module TimeTracker
                              tmonth = #{month}"],
              :select => "sum(hours)"
            }
-         }
+        }
+
+        scope :work_hours_per_user_by_date_range, lambda {|user_id, from, to|
+           {
+             :conditions => ["user_id = #{user_id} and 
+                             spent_from >= '#{from}' and
+                             spent_to <= '#{to}'"],
+             :select => "sum(hours)"
+           }
+        }
+
       end
     end
     
