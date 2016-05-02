@@ -3,7 +3,7 @@ class TimeTrackerController < TimelogController
   
   skip_before_filter :authorize
   before_filter :require_login
-  accept_api_auth :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months
+  accept_api_auth :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months, :users_hours_by_date_range
   prepend_before_filter :find_scrum_project, :only => [:my_trackable_opened_issues, :activities]
 
   # before_filter :authorize_global, :only => [:charts]
@@ -101,6 +101,25 @@ class TimeTrackerController < TimelogController
         memo2
       end
 
+      memo
+    end
+
+    respond_to do |format|
+      format.json { render :json => @users_hours }
+    end
+  end
+
+  def users_hours_by_date_range
+    from_date = params[:from]
+    to_date = params[:to]
+    
+    #swap from into to date if from date greater than to date
+    if(from_date > to_date)
+      from_date,to_date = to_date,from_date
+    end
+
+    @users_hours = User.all.inject({}) do |memo, user| 
+      memo["#{user.login}"] = TimeEntry.work_hours_per_user_by_date_range(user.id, from_date, to_date).sum(:hours)
       memo
     end
 
