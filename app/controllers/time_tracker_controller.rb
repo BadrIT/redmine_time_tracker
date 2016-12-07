@@ -3,7 +3,7 @@ class TimeTrackerController < TimelogController
 
   skip_before_filter :authorize
   before_filter :require_login
-  accept_api_auth :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months, :users_hours_by_date_range
+  accept_api_auth :activities, :trackers, :my_trackable_opened_issues, :users_hours_by_months, :users_hours_by_date_range, :charts
   prepend_before_filter :find_scrum_project, :only => [:my_trackable_opened_issues, :activities]
 
   # before_filter :authorize_global, :only => [:charts]
